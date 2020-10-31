@@ -18,16 +18,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+)
+
+THIRD_PARTY_APPS = (
+    'rest_framework',
+)
+
+LOCAL_APPS = (
     'apps.authentication',
     'apps.blog',
-]
+)
+
+# Application definition
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,7 +78,7 @@ except Exception:
 
 
 if DEBUG and not ('test' in sys.argv):
-    INSTALLED_APPS += ['debug_toolbar']
+    INSTALLED_APPS += ('debug_toolbar',)
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware',]
 
 
@@ -91,6 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+APPEND_SLASH = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -115,3 +127,10 @@ STATICFILES_DIRS = (
 # Media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
+
+if not DEBUG:
+    REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework.renderers.JSONRenderer',
+        )
+    }

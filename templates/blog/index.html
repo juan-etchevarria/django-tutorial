@@ -1,12 +1,20 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block "content" %}
+<button type="button" id="create-post">Crear</button>
+
 <main role="main" class="container">
   <div class="row">
     <div class="col-md-8 blog-main">
+      <div id="new-posts">
+      </div>
       {% for post in posts %}
       <div class="blog-post">
-        <h2 class="blog-post-title">{{ post.title }}</h2>
+        <h2 class="blog-post-title">
+          <a href="{% url 'post_blog' post.pk %}">{{ post.title }}</a>
+        </h2>
         <p class="blog-post-meta">{{ post.created }} by <a href="#">{{ post.user.username }}</a></p>
 
         {% if post.image %}
@@ -28,4 +36,14 @@
   </div><!-- /.row -->
 
 </main><!-- /.container -->
+{% endblock %}
+
+{% block "js" %}
+<script src="{% static 'js/blog/post.js' %}"></script>
+
+<script>
+document.querySelector('#create-post').addEventListener('click', function() {
+  Post.createPost();
+});
+</script>
 {% endblock %}
